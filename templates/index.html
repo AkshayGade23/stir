@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trending Topics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        a {
+            text-decoration: none;
+            color: blue;
+            cursor: pointer;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        h2 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            margin: 5px 0;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+        }
+    </style>
+    <script>
+        async function fetchData() {
+            // Fetch the data from the server
+            const response = await fetch('/run_script', { method: 'GET' });
+            const data = await response.json();
+
+            // Update the UI dynamically
+            document.getElementById('results').innerHTML = `
+                <h2>These are the most happening topics as on ${data.end_time}</h2>
+                <ul>
+                    <li>${data.trend1}</li>
+                    <li>${data.trend2}</li>
+                    <li>${data.trend3}</li>
+                    <li>${data.trend4}</li>
+                    <li>${data.trend5}</li>
+                    
+                </ul>
+                <p>The IP address used for this query was ${data.ip_address}</p>
+               
+            `;
+        }
+
+        async function fetchMongoData() {
+            // Fetch the data from the server
+            const response = await fetch('/run_queury', { method: 'GET' });
+            const data = await response.json();
+
+            // Update the UI dynamically
+            document.getElementById('results2').innerHTML = `
+                <h2>Here’s a JSON extract of this record from the MongoDB:</h2>
+                <pre>${JSON.stringify(data, null, 4)}</pre>
+            `;
+        }
+    </script>
+</head>
+<body>
+    <h1>Trending Topics</h1>
+    <a onclick="fetchData()">Click here to run the script.</a>
+    <div id="results">
+        <p>Nothing here </p>
+    </div>
+    <div id="results2">
+        <h2>Here’s a JSON extract of this record from the MongoDB:</h2>
+        <p>Nothing here</p>
+    </div>
+    <a onclick="fetchMongoData()">Click here to run the query again.</a>
+</body>
+</html>
